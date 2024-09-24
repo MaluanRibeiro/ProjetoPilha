@@ -2,6 +2,7 @@ package app;
 
 import java.util.Date;
 import java.util.Scanner;
+import java.util.Stack;
 import Entidades.Cliente;
 import Entidades.Veiculo;
 import Repositorios.RepositorioClientesArrayList;
@@ -21,6 +22,7 @@ public class App {
         ServicoAluguel servicoAluguel = new ServicoAluguel(repositorioVeiculos, repositorioClientes, repositorioContratos);
         ServicoManutencaoImpl servicoManutencao = new ServicoManutencaoImpl(repositorioVeiculos);
 
+        Stack<String> historicoAcoes = new Stack<>();
 
         Cliente cliente1 = new Cliente("Maluan", "12345678900");
         Veiculo veiculo1 = new Veiculo("ABC-1234", "Honda Civic");
@@ -39,6 +41,7 @@ public class App {
             System.out.println("5. Listar Veículos");
             System.out.println("6. Listar Contratos");
             System.out.println("7. Sair");
+            System.out.println("8. Exibir Histórico de Ações");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
             scanner.nextLine();
@@ -53,6 +56,8 @@ public class App {
                     System.out.print("Digite o valor da diária: ");
                     double valorDiaria = scanner.nextDouble();
                     servicoAluguel.alugarVeiculoCurtoPrazo(cpfCurto, placaCurto, new Date(), new Date(System.currentTimeMillis() + 86400000L), valorDiaria);
+                    historicoAcoes.push("Aluguel Curto Prazo: Cliente " + cpfCurto + " alugou o veículo " + placaCurto);
+
                     break;
 
                 case 2:
@@ -70,6 +75,8 @@ public class App {
                     System.out.print("Digite a Placa do Veículo para Devolver: ");
                     String placaDevolver = scanner.nextLine();
                     servicoAluguel.devolverVeiculo(placaDevolver);
+                    historicoAcoes.push("Devolução: Veículo " + placaDevolver + " devolvido.");
+
                     break;
 
                 case 4:
@@ -88,7 +95,16 @@ public class App {
                 case 6:
                     servicoAluguel.listarContratos();
                     break;
-
+                case 8:
+                    if (!historicoAcoes.isEmpty()) {
+                        System.out.println("Histórico de Ações:");
+                        for (String acao : historicoAcoes) {
+                            System.out.println(acao);
+                        }
+                    } else {
+                        System.out.println("Nenhuma ação registrada ainda.");
+                    }
+                    break;
                 case 7:
                     System.out.println("Saindo do sistema...");
                     break;
@@ -96,7 +112,9 @@ public class App {
                 default:
                     System.out.println("Opção inválida.");
                     break;
+
             }
+
         } while (opcao != 7);
 
         scanner.close();
