@@ -3,6 +3,7 @@ package Entidades;
 import java.util.Date;
 
 public abstract class Contrato {
+
     private Cliente cliente;
     private Veiculo veiculo;
     private Date dataInicio;
